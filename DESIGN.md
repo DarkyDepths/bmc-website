@@ -116,7 +116,14 @@ without a second stylesheet.
   colour on focus, so the affordance is the document's own vocabulary rather than an input
   widget borrowed from a product UI. Its submit is the same `Action` object as every other
   button on the site, not a second, slightly different one.
-- **Seal.** A double `--wine-bright` ring with the mark at its centre and the registered name
+- **Logo lockup.** The client's own logo, with the registered name set beside it the way a
+  letterhead does it: a hairline rule, then "Best Management & Consulting" in the body face,
+  tracked uppercase at 11px, held to two lines so the block stays shorter than the logo and
+  the header keeps its 72px. "BmC" alone tells a first-time reader nothing; the logo is the
+  loud object in the pair and the name stays quiet beside it. Below `sm` the name drops and
+  the logo stands alone. The logo's own colours are off-palette by design history rather
+  than by choice, so nothing else on the page borrows them.
+- **Seal.** A double `--wine-bright` ring with the client's logo at its centre and the name
   running along the top of the arc. Drawn once, on the contact plate, and never repeated. The
   caption is Latin in all three locales: it is a stamp of the registered entity, and the
   letter-spacing the ring depends on would break Arabic joins.
@@ -131,7 +138,10 @@ this system.
 - Smooth scroll via Lenis when motion is allowed.
 - Reveals are short, staggered, once on enter: 14px translate plus opacity, 620ms.
 - **The cover sheet.** A bound document is closed before it is read, so the site opens
-  closed: a paper-coloured sheet carrying the mark, which is a histogram, building itself.
+  closed: a paper-coloured sheet carrying the abstracted mark, which is a histogram,
+  building itself. This mark exists only here. Everywhere else the site carries the
+  client's own logo; the sheet is the one place the abstraction is allowed to appear,
+  because it is the one place that has to move.
   The three bars rise in order, the wine one last because it is the one that breaks the
   frame, they hold, they drop, and it repeats for as long as the wait lasts. Then the sheet
   lifts off the top of the page and the document is open. It is paper, not pine, so the

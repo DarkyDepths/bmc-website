@@ -1,4 +1,4 @@
-import { Mark } from '@/components/layout/Wordmark';
+import { Wordmark } from '@/components/layout/Wordmark';
 import { cn } from '@/lib/cn';
 
 /**
@@ -52,7 +52,9 @@ export function Seal({ caption, className }: { caption: string; className?: stri
         </text>
       </svg>
 
-      <Mark className="h-9 w-9" tone="bone" />
+      {/* The stamp carries the client's logo, sized to sit inside the ring without
+          crowding the caption running around it. */}
+      <Wordmark label="" tone="bone" className="h-7 w-auto" />
     </div>
   );
 }

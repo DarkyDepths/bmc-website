@@ -26,6 +26,14 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+/**
+ * Only the three locales exist. `output: 'export'` enforces this on its own, whatever this
+ * is set to: a param outside `generateStaticParams` throws rather than 404s, and in
+ * `next dev` that surfaces as a 500 on any unknown path, because `[locale]` is the only
+ * top-level segment and therefore matches everything. The built site is not affected, an
+ * unknown path there is simply a file that does not exist and the host serves 404.html.
+ * `next.config.ts` carries a dev-only rewrite that turns those into real 404s.
+ */
 export const dynamicParams = false;
 
 export const viewport: Viewport = {
@@ -71,12 +79,12 @@ export async function generateMetadata({ params }: LayoutParams): Promise<Metada
       description: dict.meta.description,
     },
     icons: {
-      /* The .ico is not only for old browsers: it is also what stops a browser's
-         implicit /favicon.ico request from falling into the [locale] segment. */
-      icon: [
-        { url: '/favicon.svg', type: 'image/svg+xml' },
-        { url: '/favicon.ico', sizes: 'any' },
-      ],
+      /* Built from the client's logo. The .ico is not only for old browsers: it is also
+         what stops a browser's implicit /favicon.ico request from falling into the
+         [locale] segment. A wide script wordmark in a 16px square is inherently soft,
+         see the note in README. */
+      icon: [{ url: '/favicon.ico', sizes: 'any' }],
+      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     },
     robots: { index: true, follow: true },
   };
@@ -136,6 +144,7 @@ export default async function LocaleLayout({
           <Header
             locale={typed}
             brand={dict.brand.short}
+            brandFull={dict.brand.full}
             labels={dict.nav.chapters}
             contactLabel={dict.nav.contact}
             summaryLabel={dict.nav.summary}

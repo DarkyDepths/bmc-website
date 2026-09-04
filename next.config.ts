@@ -28,6 +28,33 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: '/', destination: '/fr/', permanent: false }];
   },
+
+  /**
+   * Dev only, same reasoning as above, and the same reason it is safe: the export drops
+   * rewrites entirely.
+   *
+   * `[locale]` is the only top-level segment, so it matches every path the site does not
+   * serve. Under `output: 'export'` a param outside `generateStaticParams` throws instead
+   * of 404ing, so in `next dev` a typo, a probe for /wp-admin, or any stale link comes
+   * back as **Internal Server Error** rather than a not-found page. This catches those
+   * before they reach the segment and serves the real 404 page instead.
+   *
+   * `afterFiles` matters: it runs after `public/` and `_next/`, so real assets, robots.txt
+   * and sitemap.xml are served normally and never rewritten. The pattern excludes the
+   * three locales and anything with a file extension.
+   */
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [
+        {
+          source: '/:path((?!fr/|en/|ar/|fr$|en$|ar$)[^.]*)',
+          destination: '/404.html',
+        },
+      ],
+      fallback: [],
+    };
+  },
 };
 
 export default nextConfig;

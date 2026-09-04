@@ -68,7 +68,8 @@ explicitly:
 | `/` in the build | [scripts/static-shells.mjs](scripts/static-shells.mjs) writes `out/index.html` | Static export has no middleware, so locale negotiation happens client-side: `hreflang` alternates for crawlers, a `navigator.languages` match for browsers, `<meta http-equiv="refresh">` to `/fr/` for no-JS. |
 | `/` in dev | a `redirects()` entry in [next.config.ts](next.config.ts) | Dev has no `out/index.html`. The redirect makes `/` resolve instead of falling through to the wrapper-less not-found page. `output: 'export'` ignores redirects, which is why the build keeps the smarter shell above and Next prints a notice about it. |
 | `/404.html` | the same script | Next's generated 404 comes out without `<!doctype>`, `<html>` or `<body>` for the reason above, and it would be malformed on any host that serves it. The hand-written one is a valid document, offers all three locales rather than guessing, and ships no JavaScript. |
-| `/favicon.ico` | [public/favicon.ico](public/favicon.ico) | A browser's implicit request for it would otherwise fall into the `[locale]` segment, which `generateStaticParams` does not contain, and 500 in dev. A real file short-circuits routing. |
+| `/favicon.ico` | [public/favicon.ico](public/favicon.ico) | Built from the client's logo. A browser's implicit request for it would otherwise fall into the `[locale]` segment and 500 in dev. A real file short-circuits routing. |
+| any unknown path in dev | a `rewrites()` entry in [next.config.ts](next.config.ts) | `[locale]` is the only top-level segment, so it matches every path the site does not serve. Under `output: 'export'` a param outside `generateStaticParams` **throws rather than 404s**, so in `next dev` a typo or a bot probe returns *Internal Server Error*. The rewrite catches those first and serves `public/404.html`. The export drops rewrites, and there an unknown path is simply a missing file the host 404s. |
 
 If you deploy behind a host that can negotiate language server-side, prefer that and leave
 `out/index.html` as the fallback. Point the host's 404 handler at `/404.html`.
@@ -101,8 +102,42 @@ src/
 scripts/
   static-shells.mjs         writes out/index.html and out/404.html after the build
 public/
-  favicon.svg  favicon.ico
+  bmc-logo.png            the client's logo, rebuilt (see The logo below)
+  bmc-logo-light.png      the same artwork, lifted for dark plates
+  favicon.ico  apple-touch-icon.png
 ```
+
+## The logo
+
+The site uses **the client's own logo** everywhere it appears: header, footer, the seal on
+the contact plate, the favicon and the touch icon. The abstracted mark that was drawn
+earlier now appears in exactly one place, the loading sheet, and nowhere else.
+
+The supplied original is `logo bmc.docx`, holding a **265x175 JPEG** on a white ground with
+a grey drop shadow baked into the pixels. Two things had to be fixed before it could go on
+a page: the white box, which is visible on the ivory canvas, and the drop shadow, which
+turns into a bright halo the moment the logo crosses a pine plate.
+
+Both files in `public/` are rebuilt from that JPEG:
+
+- Every pixel is classified against the logo's **own sampled palette** (teal `#1a9090`,
+  green `#189030`, wine `#963060`, mint, grey `#b0b0b0`) plus the background and its shadow
+  gradient. Anything nearest a background anchor is dropped to transparent, everything else
+  is flattened to its logo colour. That removes the halo and the JPEG noise in one pass.
+- `bmc-logo-light.png` is the same artwork with each colour lifted in place for dark
+  plates. Same shapes, same hues, same arrangement, legible on pine. This is the ordinary
+  dark-ground variant every brand needs, not a redesign.
+
+**Ask the client for the original vector** (`.ai`, `.eps`, `.pdf` or `.svg`) from whoever
+made the logo. 265x175 is below what a website wants: it is fine at the sizes used here,
+because it only ever scales down, but there is no headroom for a large placement, print, or
+a crisp favicon. If a vector arrives, replace the two PNGs with SVGs and the `<img>` in
+[Wordmark.tsx](src/components/layout/Wordmark.tsx) needs no other change.
+
+**The favicon is soft at 16px**, and that is inherent: it is a wide script wordmark being
+fitted into a square 16 pixels across. It reads from 32px up. If the client wants a sharp
+tab icon, the fix is a dedicated icon mark, for instance the frame and rising arrow alone
+without the lettering, which is still their logo and survives the size. Say the word.
 
 ### Adding or changing copy
 
@@ -135,9 +170,10 @@ the submit is intercepted and relayed over `fetch`, so nobody leaves the page. F
 
 > **This does not work until the recipient activates it.** The first submission to a new
 > address triggers a one-time activation email from FormSubmit. Until someone at
-> `CONTACT.email` opens it and clicks "Activate Form", every later submission is silently
-> discarded. Do this once, from a real submission on the live domain, before launch, and
-> confirm a test message arrives.
+> `contact@best-bmc.com` opens it and clicks "Activate Form", every later submission is
+> silently discarded. Do this once, from a real submission on the live domain, before
+> launch, and confirm a test message arrives. It is the single remaining step between the
+> form working in code and the form working in fact.
 
 ## Assumptions to confirm before launch
 
@@ -145,8 +181,8 @@ These are placeholders. They are the only invented values in the project.
 
 | Where | Value | Note |
 | --- | --- | --- |
-| `CONTACT.email` in [src/i18n/config.ts](src/i18n/config.ts) | `contact@bmc-conseil.tn` | **Invented, and now load-bearing.** The brief gives no address. It is the printed address, the `mailto:` in the footer, the `email` in the JSON-LD, *and* the FormSubmit recipient. Replace it before launch or the contact form delivers nowhere. |
-| `SITE_URL` in [src/i18n/config.ts](src/i18n/config.ts) | `https://www.bmc-conseil.tn` | **Invented.** Drives canonical URLs, `hreflang`, Open Graph, and the form's no-JS `_next` return address. Must match the real domain or the metadata is wrong. |
+| `CONTACT.email` in [src/i18n/config.ts](src/i18n/config.ts) | `contact@best-bmc.com` | Confirmed by the client. Load bearing in four places: the printed address, the footer `mailto:`, the `email` in the JSON-LD, and the FormSubmit recipient. It still has to be **activated once**, see above. |
+| `SITE_URL` in [src/i18n/config.ts](src/i18n/config.ts) | `https://best-bmc.com` | The apex, not `www`. Drives canonical URLs, `hreflang`, Open Graph, `robots.txt`, `sitemap.xml` and the form's no-JS `_next` return address. `www.best-bmc.com` must redirect to it, see [DEPLOY.md](DEPLOY.md). |
 | Postal address | `Imm. Galaxy D4, La Petite Ariana, Tunisie` | From the brief, but no street or postcode. Worth completing for local search. |
 | Reply time | "sous 48 heures ouvrées" / "within two working days" | In `contact.form.sent` in all three message files. A promise the cabinet has to be able to keep. Change it if two days is wrong. |
 

@@ -181,6 +181,13 @@ await writeFile(join(OUT, '404.html'), notFoundHtml, 'utf8');
 await mkdir(join(OUT, '404'), { recursive: true });
 await writeFile(join(OUT, '404', 'index.html'), notFoundHtml, 'utf8');
 
+/* And into public/, which is what `next dev` serves. The rewrite in next.config.ts sends
+   unknown paths here so a typo in dev is a 404 page rather than a 500, and `next build`
+   copies this file into the export as well. Same bytes in both places. */
+const PUBLIC = join(process.cwd(), 'public');
+await mkdir(PUBLIC, { recursive: true });
+await writeFile(join(PUBLIC, '404.html'), notFoundHtml, 'utf8');
+
 console.log(
   `static-shells: wrote out/index.html and out/404.html ` +
     `(default "${DEFAULT_LOCALE}", locales: ${LOCALES.join(', ')})`,

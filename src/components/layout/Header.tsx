@@ -12,6 +12,7 @@ import { Wordmark } from './Wordmark';
 type HeaderProps = {
   locale: Locale;
   brand: string;
+  brandFull: string;
   labels: Record<ChapterId, string>;
   contactLabel: string;
   summaryLabel: string;
@@ -23,6 +24,7 @@ type HeaderProps = {
 export function Header({
   locale,
   brand,
+  brandFull,
   labels,
   contactLabel,
   summaryLabel,
@@ -64,9 +66,14 @@ export function Header({
         scrolled || open ? 'bg-paper' : 'bg-transparent',
       )}
     >
-      <div className="flex items-center justify-between gap-6 px-[var(--gutter)] py-4 lg:py-5">
-        <a href="#couverture" className="rounded-xs" aria-label={brand}>
-          <Wordmark label={brand} />
+      {/* py-4 at both sizes: 16 + the 40px logo + 16 is exactly --header-h, so the offsets
+          the pinned track and the running head are calculated from stay true. */}
+      <div className="flex items-center justify-between gap-6 px-[var(--gutter)] py-4">
+        {/* inline-flex, not the default inline: an inline box around a flex child still
+            reserves room for a text baseline, which added 8px and pushed the header past
+            --header-h. */}
+        <a href="#couverture" className="inline-flex rounded-xs" aria-label={brandFull}>
+          <Wordmark label={brand} name={brandFull} />
         </a>
 
         {/* Running head. The chapter you are actually in, the way a bound report

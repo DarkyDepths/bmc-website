@@ -15,7 +15,12 @@ export function Footer({ dict, locale }: { dict: Dict; locale: Locale }) {
       <div className="shell py-14 lg:py-16">
         <div className="grid12 gap-y-10">
           <div className="col-span-4 md:col-span-5">
-            <Wordmark label={dict.brand.short} tone="bone" />
+            <Wordmark
+              label={dict.brand.short}
+              name={dict.brand.full}
+              tone="bone"
+              logoClassName="h-12"
+            />
             <p className="mt-4 max-w-[34ch] text-small leading-relaxed text-bone-2">
               {dict.footer.tagline}
             </p>

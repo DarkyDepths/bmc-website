@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 import { Cabinet } from '@/components/sections/Cabinet';
 import { Contact } from '@/components/sections/Contact';
 import { Cover } from '@/components/sections/Cover';
@@ -16,7 +18,10 @@ type PageParams = { params: Promise<{ locale: string }> };
  */
 export default async function LocalePage({ params }: PageParams) {
   const { locale } = await params;
-  const typed = (isLocale(locale) ? locale : 'fr') as Locale;
+  /* Same guard as the layout. An unknown segment is a 404, not a silent fallback to
+     French: serving the French page at /robots.txt would be worse than serving nothing. */
+  if (!isLocale(locale)) notFound();
+  const typed = locale as Locale;
   const dict = getDictionary(typed);
   const rtl = localeMeta[typed].dir === 'rtl';
 

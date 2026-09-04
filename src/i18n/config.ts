@@ -60,12 +60,22 @@ export function folio(id: ChapterId): string {
   return String(index + 1).padStart(2, '0');
 }
 
-export const SITE_URL = 'https://www.bmc-conseil.tn';
+/**
+ * Canonical origin: the apex, not `www`. Drives canonical URLs, hreflang, Open Graph,
+ * robots.txt, sitemap.xml and the contact form's no-JS return address. Whichever of the
+ * two the host answers on, the other must redirect to it, or crawlers see two sites.
+ */
+export const SITE_URL = 'https://best-bmc.com';
 
-/** Real coordinates from the brief. The email is a placeholder, see README. */
+/**
+ * Real coordinates. `email` is the cabinet's official address, and it is load bearing in
+ * four places: the printed address on the contact plate, the footer `mailto:`, the
+ * `email` in the JSON-LD, and the recipient the contact form posts to. See the FormSubmit
+ * activation note in the README before launch.
+ */
 export const CONTACT = {
   phoneDisplay: '+216 70 621 342',
   phoneHref: 'tel:+21670621342',
-  email: 'contact@bmc-conseil.tn',
+  email: 'contact@best-bmc.com',
   addressLines: ['Imm. Galaxy D4', 'La Petite Ariana', 'Tunisie'],
 } as const;
