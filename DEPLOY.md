@@ -3,8 +3,8 @@
 Domain: `best-bmc.com` (OVH) · Host: Vercel · Email: OVH Zimbra
 
 > **The one thing that can break email:** when you point the domain at Vercel you change
-> only the `A` and `CNAME` records. **Never touch the `MX` records or the `TXT` record that
-> starts with `v=spf1`.** Those are Zimbra. Delete them and mail stops arriving.
+> only the `A` and `CNAME` records. **Never touch the MX records or the TXT record that
+> starts with v=spf1.** Those are Zimbra. Delete them and mail stops arriving.
 
 ---
 
@@ -50,9 +50,9 @@ If any of that fails, stop here and tell me. Do not change DNS yet.
 
 Expect something like:
 
-| Type | Name | Value |
-| --- | --- | --- |
-| A | `@` | `76.76.21.21` |
+| Type  | Name  | Value                  |
+| ----- | ----- | ---------------------- |
+| A     | `@`   | `76.76.21.21`          |
 | CNAME | `www` | `cname.vercel-dns.com` |
 
 **Use the values Vercel shows you, not the ones in this table** — they change.
@@ -65,8 +65,8 @@ Expect something like:
    **Modify** it → put Vercel's IP as the target → confirm.
 4. Find the `CNAME` record named `www` → **Modify** → target `cname.vercel-dns.com.`
    (with the trailing dot) → confirm.
-5. **Leave every `MX` record exactly as it is.**
-6. **Leave the `TXT` record starting with `v=spf1` exactly as it is.**
+5. **Leave every MX record exactly as it is.**
+6. **Leave the TXT record starting with v=spf1 exactly as it is.**
 7. If OVH offers to "reset the zone" or apply a "web hosting" template, **say no**. That
    wipes the mail records.
 
@@ -99,7 +99,7 @@ once.
 
 1. Go to `https://best-bmc.com/fr/#contact`.
 2. Fill the form with a real message and send it.
-3. Open the **contact@best-bmc.com** mailbox in Zimbra.
+3. Open the **abdelmalek.jabbar@best-bmc.com** mailbox in Zimbra.
 4. Find the email from **FormSubmit** and click **Activate Form**.
 5. Send a second test message from the site.
 6. Confirm that one arrives in Zimbra.

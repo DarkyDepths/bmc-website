@@ -170,7 +170,7 @@ the submit is intercepted and relayed over `fetch`, so nobody leaves the page. F
 
 > **This does not work until the recipient activates it.** The first submission to a new
 > address triggers a one-time activation email from FormSubmit. Until someone at
-> `contact@best-bmc.com` opens it and clicks "Activate Form", every later submission is
+> `abdelmalek.jabbar@best-bmc.com` opens it and clicks "Activate Form", every later submission is
 > silently discarded. Do this once, from a real submission on the live domain, before
 > launch, and confirm a test message arrives. It is the single remaining step between the
 > form working in code and the form working in fact.
@@ -181,7 +181,7 @@ These are placeholders. They are the only invented values in the project.
 
 | Where | Value | Note |
 | --- | --- | --- |
-| `CONTACT.email` in [src/i18n/config.ts](src/i18n/config.ts) | `contact@best-bmc.com` | Confirmed by the client. Load bearing in four places: the printed address, the footer `mailto:`, the `email` in the JSON-LD, and the FormSubmit recipient. It still has to be **activated once**, see above. |
+| `CONTACT.email` in [src/i18n/config.ts](src/i18n/config.ts) | `abdelmalek.jabbar@best-bmc.com` | Confirmed by the client. Load bearing in four places: the printed address, the footer `mailto:`, the `email` in the JSON-LD, and the FormSubmit recipient. It still has to be **activated once**, see above. |
 | `SITE_URL` in [src/i18n/config.ts](src/i18n/config.ts) | `https://best-bmc.com` | The apex, not `www`. Drives canonical URLs, `hreflang`, Open Graph, `robots.txt`, `sitemap.xml` and the form's no-JS `_next` return address. `www.best-bmc.com` must redirect to it, see [DEPLOY.md](DEPLOY.md). |
 | Postal address | `Imm. Galaxy D4, La Petite Ariana, Tunisie` | From the brief, but no street or postcode. Worth completing for local search. |
 | Reply time | "sous 48 heures ouvrées" / "within two working days" | In `contact.form.sent` in all three message files. A promise the cabinet has to be able to keep. Change it if two days is wrong. |

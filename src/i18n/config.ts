@@ -76,6 +76,6 @@ export const SITE_URL = 'https://best-bmc.com';
 export const CONTACT = {
   phoneDisplay: '+216 70 621 342',
   phoneHref: 'tel:+21670621342',
-  email: 'contact@best-bmc.com',
+  email: 'abdelmalek.jabbar@best-bmc.com',
   addressLines: ['Imm. Galaxy D4', 'La Petite Ariana', 'Tunisie'],
 } as const;
